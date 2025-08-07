@@ -35,8 +35,9 @@ buildPythonPackage rec {
   };
 
   patches = [
-    # Fix hardcoded `fapi-config.json` configuration path
-    ./fapi-config.patch
+    # Properly restore environment variables upon exit from
+    # FAPIConfig context
+    ./fapiconfig-restore-env.patch
     # libtpms (underneath swtpm) bumped the TPM revision
     # https://github.com/tpm2-software/tpm2-pytss/pull/593
     (fetchpatch {
@@ -94,6 +95,10 @@ buildPythonPackage rec {
     tpm2-tools
     swtpm
   ];
+
+  preCheck = ''
+    export TSS2_FAPICONF=${tpm2-tss.out}/etc/tpm2-tss/fapi-config-test.json
+  '';
 
   pythonImportsCheck = [ "tpm2_pytss" ];
 
