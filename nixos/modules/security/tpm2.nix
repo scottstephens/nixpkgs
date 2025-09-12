@@ -302,7 +302,7 @@ in
 
                 # if file exists, read old hash
                 if [ -f $hashFile ]; then
-                  oldHash=$(cat $hashFile)
+                  oldHash="$(< $hashFile)"
                 else
                   oldHash=""
                 fi
